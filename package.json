@@ -1,0 +1,8 @@
+{
+  "name": "kitchen-appliance-portal",
+  "version": "1.0.0",
+  "description": "Kitchen Appliances Client Portal for New Home Project",
+  "scripts": {
+    "start": "npx serve ."
+  }
+}

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kitchen Appliances | New Home Project</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(145deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      padding: 40px 24px;
+      color: #e8e8e8;
+    }
+
+    .portal-header {
+      max-width: 1400px;
+      margin: 0 auto 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .brand-section h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #64ffda;
+      margin: 0 0 8px 0;
+    }
+
+    .brand-section h2 {
+      font-size: 42px;
+      font-weight: 700;
+      margin: 0;
+      background: linear-gradient(135deg, #fff 0%, #a8b2d1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+
+    .summary-cards {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .summary-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 16px 24px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .summary-card.highlight {
+      background: linear-gradient(135deg, rgba(100,255,218,0.1) 0%, rgba(100,255,218,0.02) 100%);
+      border-color: rgba(100,255,218,0.3);
+    }
+
+    .summary-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #8892b0;
+      margin-bottom: 4px;
+    }
+
+    .summary-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 24px;
+      font-weight: 700;
+      color: #ccd6f6;
+    }
+
+    .summary-card.highlight .summary-value {
+      color: #64ffda;
+    }
+
+    .controls-bar {
+      max-width: 1400px;
+      margin: 0 auto 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      padding: 4px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .filter-tab {
+      padding: 10px 20px;
+      border: none;
+      background: transparent;
+      color: #8892b0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .filter-tab:hover {
+      color: #ccd6f6;
+    }
+
+    .filter-tab.active {
+      background: rgba(100,255,218,0.1);
+      color: #64ffda;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .action-btn {
+      padding: 10px 18px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.02);
+      color: #a8b2d1;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.2);
+      color: #fff;
+    }
+
+    .table-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      overflow-x: auto;
+    }
+
+    .appliance-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    .appliance-table th {
+      background: rgba(0,0,0,0.3);
+      padding: 16px 20px;
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #64ffda;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .appliance-table th:first-child {
+      width: 50px;
+      text-align: center;
+    }
+
+    .appliance-table td {
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top;
+      transition: all 0.2s ease;
+    }
+
+    .appliance-table tr {
+      transition: all 0.2s ease;
+    }
+
+    .appliance-table tbody tr:hover {
+      background: rgba(100,255,218,0.02);
+    }
+
+    .appliance-table tr.selected {
+      background: rgba(100,255,218,0.05);
+    }
+
+    .appliance-table tr.selected td {
+      border-color: rgba(100,255,218,0.1);
+    }
+
+    .checkbox-cell {
+      text-align: center;
+    }
+
+    .custom-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: transparent;
+    }
+
+    .custom-checkbox:hover {
+      border-color: #64ffda;
+    }
+
+    .custom-checkbox.checked {
+      background: #64ffda;
+      border-color: #64ffda;
+    }
+
+    .custom-checkbox svg {
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .custom-checkbox.checked svg {
+      opacity: 1;
+    }
+
+    .kitchen-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .kitchen-badge.main {
+      background: rgba(99,179,237,0.15);
+      color: #63b3ed;
+    }
+
+    .kitchen-badge.adu {
+      background: rgba(237,137,54,0.15);
+      color: #ed8936;
+    }
+
+    .kitchen-badge.ordered {
+      background: rgba(72,187,120,0.15);
+      color: #48bb78;
+    }
+
+    .appliance-name {
+      font-weight: 600;
+      color: #ccd6f6;
+      margin-bottom: 2px;
+    }
+
+    .model-name {
+      color: #e8e8e8;
+      font-weight: 500;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    .specs-text {
+      font-size: 13px;
+      color: #8892b0;
+      line-height: 1.5;
+    }
+
+    .price-display {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      color: #64ffda;
+      font-size: 15px;
+    }
+
+    .notes-text {
+      font-size: 13px;
+      color: #8892b0;
+      font-style: italic;
+    }
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      color: #a8b2d1;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .link-btn:hover {
+      background: rgba(100,255,218,0.1);
+      border-color: rgba(100,255,218,0.3);
+      color: #64ffda;
+    }
+
+    .link-btn.frigidaire {
+      background: rgba(72,187,120,0.08);
+      border-color: rgba(72,187,120,0.2);
+      color: #48bb78;
+    }
+
+    .link-btn.frigidaire:hover {
+      background: rgba(72,187,120,0.15);
+      border-color: rgba(72,187,120,0.4);
+      color: #68d391;
+    }
+
+    .ordered-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 14px;
+      background: rgba(72,187,120,0.1);
+      border: 1px solid rgba(72,187,120,0.3);
+      border-radius: 6px;
+      color: #48bb78;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .footer-note {
+      max-width: 1400px;
+      margin: 32px auto 0;
+      text-align: center;
+      font-size: 13px;
+      color: #5a6378;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 16px;
+      }
+
+      .brand-section h2 {
+        font-size: 28px;
+      }
+
+      .summary-cards {
+        width: 100%;
+      }
+
+      .summary-card {
+        flex: 1;
+        min-width: 100px;
+        padding: 12px 16px;
+      }
+
+      .summary-value {
+        font-size: 18px;
+      }
+
+      .filter-tabs {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .filter-tab {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+
+      .action-buttons {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="portal-header">
+    <div class="brand-section">
+      <h1>New Home Project</h1>
+      <h2>Kitchen Appliances</h2>
+    </div>
+    <div class="summary-cards">
+      <div class="summary-card">
+        <div class="summary-label">Total Items</div>
+        <div class="summary-value" id="total-items">23</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Selected</div>
+        <div class="summary-value" id="selected-count">0</div>
+      </div>
+      <div class="summary-card highlight">
+        <div class="summary-label">Est. Minimum</div>
+        <div class="summary-value" id="selected-total">$0</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="controls-bar">
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">All Kitchens</button>
+      <button class="filter-tab" data-filter="Main">Main Kitchen</button>
+      <button class="filter-tab" data-filter="ADU">ADU Kitchen</button>
+      <button class="filter-tab" data-filter="Ordered">Ordered</button>
+    </div>
+    <div class="action-buttons">
+      <button class="action-btn" id="select-all">Select All</button>
+      <button class="action-btn" id="clear-all">Clear Selection</button>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table class="appliance-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Location</th>
+          <th>Appliance</th>
+          <th>Model & Specs</th>
+          <th>Price</th>
+          <th>Notes</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+      </tbody>
+    </table>
+  </div>
+
+  <p class="footer-note">
+    Prices are approximate as of January 2026. Click links to view current Costco pricing.
+  </p>
+
+  <script>
+    const applianceData = [
+      {
+        id: 1,
+        kitchen: "Main",
+        appliance: "Refrigerator",
+        model: "Whirlpool 24 cu. ft. French Door Bottom Mount",
+        specs: "36\" wide, Counter-depth, Fingerprint resistant, French doors, ENERGY STAR",
+        price: "$2,000–$2,500",
+        priceMin: 2000,
+        link: "https://www.costco.com/whirlpool-24-cu.-ft.-36-inch-wide-true-counter-depth-french-door-bottom-mount-refrigerator-in-fingerprint-resistant-stainless-steel.product.4000410619.html",
+        notes: "Fits FRIDGE:36X70 in Main; spacious modern option"
+      },
+      {
+        id: 2,
+        kitchen: "Main",
+        appliance: "Cooktop",
+        model: "GE 30\" Electric Cooktop with Power Boil",
+        specs: "30\" wide, Electric, Power Boil element, Knob controls, Stainless steel",
+        price: "$800–$1,000",
+        priceMin: 800,
+        link: "https://www.costco.com/ge-30%22-electric-cooktop-with-power-boil,-keep-warm-and-melt-settings.product.4000114731.html",
+        notes: "Matches 30\" electric drop-in cooktop for Main"
+      },
+      {
+        id: 3,
+        kitchen: "Main",
+        appliance: "Dishwasher",
+        model: "Maytag 24 in. Front Control Built-In Dishwasher",
+        specs: "24\" wide, Fingerprint resistant, 50 dBA, Stainless tub",
+        price: "$700–$900",
+        priceMin: 700,
+        link: "https://www.costco.com/maytag-24-in.-front-control-built-in-fingerprint-resistant-stainless-steel-dishwasher-with-dual-power-filtration,-50-dba.product.100682882.html",
+        notes: "Consistent quiet performance for both kitchens"
+      },
+      {
+        id: 4,
+        kitchen: "Main",
+        appliance: "Built-in Hood Insert",
+        model: "NXR EH Series Under Cabinet Range Hood",
+        specs: "30\" wide insert, 800 CFM, Stainless steel baffles, Commercial-grade",
+        price: "$400–$600",
+        priceMin: 400,
+        link: "https://www.costco.com/nxr-eh-series-under-cabinet-range-hood-with-800-cfm.product.1573995.html",
+        notes: "Matches INSERT HOOD:30\" for Main; powerful venting"
+      },
+      {
+        id: 5,
+        kitchen: "Main",
+        appliance: "Built-in Oven-Microwave Combo",
+        model: "Whirlpool 5.0 cu. ft. Wall Oven Microwave Combo",
+        specs: "30\" wide, Electric, Convection oven + microwave, Air fry, Stainless steel",
+        price: "$2,000–$2,500",
+        priceMin: 2000,
+        link: "https://www.costco.com/whirlpool-5.0-cu.-ft.-built-in-wall-oven-microwave-combo-with-air-fry.product.4000310005.html",
+        notes: "Perfect for OVEN MICROWAVE COMBO 30\" in Main"
+      },
+      {
+        id: 6,
+        kitchen: "Main",
+        appliance: "Farm Sink",
+        model: "Kohler Provo 33\" Workstation Kitchen Sink Kit",
+        specs: "33\" wide, Stainless steel, Apron-front farmhouse style, Workstation accessories",
+        price: "$300–$400",
+        priceMin: 300,
+        link: "https://www.costco.com/kohler-provo-33-dual-mount-single-bowl-workstation-kitchen-sink-kit/4000350998",
+        notes: "Fits FARM SINK:33\" in Main; apron-front with prep tools"
+      },
+      {
+        id: 7,
+        kitchen: "ADU",
+        appliance: "Refrigerator",
+        model: "Whirlpool 19.2 cu. ft. Top Freezer Refrigerator",
+        specs: "30\" wide, Stainless Steel, ENERGY STAR, Adjustable shelves",
+        price: "$800–$900",
+        priceMin: 800,
+        link: "https://www.costco.com/whirlpool-19.2-cu.-ft.-top-freezer-refrigerator-with-led-interior-lighting.product.100214339.html",
+        notes: "Fits FRIDGE:30X70 in ADU; reliable standard depth"
+      },
+      {
+        id: 8,
+        kitchen: "ADU",
+        appliance: "Range",
+        model: "GE 30\" 5.3 cu. ft. Electric Free-standing Range",
+        specs: "30\" wide, Electric, Convection, Air fry, Smoothtop",
+        price: "$1,000–$1,200",
+        priceMin: 1000,
+        link: "https://www.costco.com/ge-30%22-5.3-cu.-ft.-electric-free-standing-range-with-convection,-no-preheat-air-fry.product.4000255615.html",
+        notes: "Matches full RANGE:30\" electric in ADU"
+      },
+      {
+        id: 9,
+        kitchen: "ADU",
+        appliance: "Dishwasher",
+        model: "Maytag 24 in. Front Control Built-In Dishwasher",
+        specs: "24\" wide, Fingerprint resistant, 50 dBA",
+        price: "$700–$900",
+        priceMin: 700,
+        link: "https://www.costco.com/maytag-24-in.-front-control-built-in-fingerprint-resistant-stainless-steel-dishwasher-with-dual-power-filtration,-50-dba.product.100682882.html",
+        notes: "Same as Main for consistency"
+      },
+      {
+        id: 10,
+        kitchen: "ADU",
+        appliance: "Over-the-Range Microwave Hood",
+        model: "GE Profile 30\" 2.1 cu. ft. Over-the-Range Microwave",
+        specs: "30\" wide, 400+ CFM venting, Sensor cooking, WiFi, Stainless steel",
+        price: "$500–$700",
+        priceMin: 500,
+        link: "https://www.costco.com/ge-profile-30%22-2.1-cu.-ft.-over-the-range-microwave-oven-with-sensor-cooking,-wifi-connect.product.100777610.html",
+        notes: "Matches MICRO HOOD:30\" in ADU; smart features"
+      },
+      {
+        id: 11,
+        kitchen: "ADU",
+        appliance: "Sink",
+        model: "Delta 33\" Stainless Steel Dual Mount Single Bowl",
+        specs: "33\" x 22\" x 9\" deep, 18-gauge, Dual-mount, Durable stainless",
+        price: "$300–$400",
+        priceMin: 300,
+        link: "https://www.costco.com/delta-33-stainless-steel-dual-mount-single-bowl-kitchen-sink.product.100853242.html",
+        notes: "Fits REGULAR SINK:33\" in ADU; versatile and highly rated"
+      },
+      {
+        id: 12,
+        kitchen: "Ordered",
+        appliance: "Side-by-Side Refrigerator",
+        model: "22 Cu. Ft. 36\" Counter-Depth Side-by-Side Refrigerator",
+        specs: "PRSC2222AF, Stainless Steel, Delivery only (No Install)",
+        price: "$1,530.47",
+        priceMin: 1530.47,
+        link: "https://www.frigidaire.com/en/p/kitchen/refrigerators/side-by-side-refrigerators/PRSC2222AF",
+        notes: "Home delivery - FREE"
+      },
+      {
+        id: 13,
+        kitchen: "Ordered",
+        appliance: "Refrigerator Water Line",
+        model: "6' Long Stainless Steel Braided Refrigerator Water Supply Line",
+        specs: "912001026",
+        price: "$18.99",
+        priceMin: 18.99,
+        link: "https://www.frigidaire.com/en/Accessories/",
+        notes: "Accessory for refrigerator"
+      },
+      {
+        id: 14,
+        kitchen: "Ordered",
+        appliance: "Electric Cooktop",
+        model: "30\" Electric Cooktop",
+        specs: "GCCE3070AD, Black Stainless Steel, Delivery only (No Install)",
+        price: "$887.82",
+        priceMin: 887.82,
+        link: "https://www.frigidaire.com/en/p/kitchen/cooktops/electric-cooktops/GCCE3070AD",
+        notes: "Home delivery - FREE"
+      },
+      {
+        id: 15,
+        kitchen: "Ordered",
+        appliance: "Top Freezer Refrigerator",
+        model: "20 Cu. Ft. Garage Ready Top Freezer Refrigerator",
+        specs: "FFHT2022AS, Stainless Steel, Delivery only (No Install)",
+        price: "$788.96",
+        priceMin: 788.96,
+        link: "https://www.frigidaire.com/en/p/kitchen/refrigerators/top-freezer-refrigerators/FFHT2022AS",
+        notes: "Home delivery - FREE"
+      },
+      {
+        id: 16,
+        kitchen: "Ordered",
+        appliance: "Over-the-Range Microwave",
+        model: "1.9 Cu. Ft. Over-the-Range Microwave with Air Fry",
+        specs: "GMOS1968AF, Stainless Steel, Delivery only (No Install)",
+        price: "$709.86",
+        priceMin: 709.86,
+        link: "https://www.frigidaire.com/en/p/kitchen/microwaves/over-the-range-microwave/GMOS1968AF",
+        notes: "Home delivery - FREE"
+      },
+      {
+        id: 17,
+        kitchen: "Ordered",
+        appliance: "Electric Range",
+        model: "30\" Electric Range with No Preheat + Air Fry",
+        specs: "GCRE3060BF, Stainless Steel, Delivery & Installation",
+        price: "$957.03",
+        priceMin: 957.03,
+        link: "https://www.frigidaire.com/en/p/kitchen/ranges/electric-ranges/GCRE3060BF",
+        notes: "Delivery & Installation - $29.00"
+      },
+      {
+        id: 18,
+        kitchen: "Ordered",
+        appliance: "Range Cord",
+        model: "4 ft. 40 Amp Range Cord with 4 Wire",
+        specs: "912000980",
+        price: "FREE",
+        priceMin: 0,
+        link: "https://www.frigidaire.com/en/Accessories/",
+        notes: "Included with range"
+      },
+      {
+        id: 19,
+        kitchen: "Ordered",
+        appliance: "Dishwasher (Main)",
+        model: "24\" Stainless Steel Tub Dishwasher",
+        specs: "FDSH4501AS, Stainless Steel, Delivery only (No Install)",
+        price: "$591.22",
+        priceMin: 591.22,
+        link: "https://www.frigidaire.com/en/p/kitchen/dishwashers/FDSH4501AS",
+        notes: "Home delivery - FREE"
+      },
+      {
+        id: 20,
+        kitchen: "Ordered",
+        appliance: "Dishwasher Kit (Main)",
+        model: "Dishwasher Water Line Kit",
+        specs: "912000909, 6' Braided Water Line, 3/4\" Elbow, Power Cord, Hardware",
+        price: "$22.99",
+        priceMin: 22.99,
+        link: "https://www.frigidaire.com/en/Accessories/",
+        notes: "Accessory kit for dishwasher"
+      },
+      {
+        id: 21,
+        kitchen: "Ordered",
+        appliance: "Dishwasher (ADU)",
+        model: "24\" Stainless Steel Tub Dishwasher",
+        specs: "FDSH4501AS, Stainless Steel, Delivery only (No Install)",
+        price: "$591.22",
+        priceMin: 591.22,
+        link: "https://www.frigidaire.com/en/p/kitchen/dishwashers/FDSH4501AS",
+        notes: "Home delivery - FREE"
+      },
+      {
+        id: 22,
+        kitchen: "Ordered",
+        appliance: "Dishwasher Kit (ADU)",
+        model: "Dishwasher Water Line Kit",
+        specs: "912000909, 6' Braided Water Line, 3/4\" Elbow, Power Cord, Hardware",
+        price: "$22.99",
+        priceMin: 22.99,
+        link: "https://www.frigidaire.com/en/Accessories/",
+        notes: "Accessory kit for dishwasher"
+      },
+      {
+        id: 23,
+        kitchen: "Ordered",
+        appliance: "Wall Oven-Microwave Combo",
+        model: "30\" Electric Wall Oven and Microwave Combination",
+        specs: "GCWM3067AF, Stainless Steel, 15+ Ways To Cook, Delivery only (No Install)",
+        price: "$2,667.42",
+        priceMin: 2667.42,
+        link: "https://www.frigidaire.com/en/p/kitchen/wall-ovens/microwave-combination-ovens/GCWM3067AF",
+        notes: "Home delivery - FREE"
+      }
+    ];
+
+    let selectedItems = new Set();
+    let currentFilter = 'all';
+
+    function getFilteredData() {
+      return currentFilter === 'all' 
+        ? applianceData 
+        : applianceData.filter(item => item.kitchen === currentFilter);
+    }
+
+    function updateSummary() {
+      const selectedCount = selectedItems.size;
+      const selectedTotal = applianceData
+        .filter(item => selectedItems.has(item.id))
+        .reduce((sum, item) => sum + item.priceMin, 0);
+
+      document.getElementById('selected-count').textContent = selectedCount;
+      document.getElementById('selected-total').textContent = '$' + selectedTotal.toLocaleString();
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('table-body');
+      const filteredData = getFilteredData();
+
+      tbody.innerHTML = filteredData.map(item => `
+        <tr class="${selectedItems.has(item.id) ? 'selected' : ''}" data-id="${item.id}">
+          <td class="checkbox-cell">
+            <div class="custom-checkbox ${selectedItems.has(item.id) ? 'checked' : ''}" data-id="${item.id}">
+              <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+                <path d="M1 5L4.5 8.5L11 1" stroke="#0c0c0c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </td>
+          <td>
+            <span class="kitchen-badge ${item.kitchen.toLowerCase()}">${item.kitchen}</span>
+          </td>
+          <td>
+            <div class="appliance-name">${item.appliance}</div>
+          </td>
+          <td>
+            <div class="model-name">${item.model}</div>
+            <div class="specs-text">${item.specs}</div>
+          </td>
+          <td>
+            <div class="price-display">${item.price}</div>
+          </td>
+          <td>
+            <div class="notes-text">${item.notes}</div>
+          </td>
+          <td>
+            ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer" class="link-btn ${item.kitchen === 'Ordered' ? 'frigidaire' : ''}">
+              ${item.kitchen === 'Ordered' ? 'Frigidaire' : 'Costco'}
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>` : `<span class="ordered-check">✓ Ordered</span>`}
+          </td>
+        </tr>
+      `).join('');
+
+      // Add click handlers to checkboxes
+      document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('click', function() {
+          const id = parseInt(this.dataset.id);
+          if (selectedItems.has(id)) {
+            selectedItems.delete(id);
+          } else {
+            selectedItems.add(id);
+          }
+          renderTable();
+          updateSummary();
+        });
+      });
+    }
+
+    // Filter tabs
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        currentFilter = this.dataset.filter;
+        renderTable();
+      });
+    });
+
+    // Select all button
+    document.getElementById('select-all').addEventListener('click', function() {
+      const filteredData = getFilteredData();
+      filteredData.forEach(item => selectedItems.add(item.id));
+      renderTable();
+      updateSummary();
+    });
+
+    // Clear all button
+    document.getElementById('clear-all').addEventListener('click', function() {
+      selectedItems.clear();
+      renderTable();
+      updateSummary();
+    });
+
+    // Initial render
+    renderTable();
+    updateSummary();
+  </script>
+</body>
+</html>
