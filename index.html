@@ -154,6 +154,18 @@
       color: #fff;
     }
 
+    .action-btn.export-btn {
+      background: rgba(72,187,120,0.1);
+      border-color: rgba(72,187,120,0.3);
+      color: #48bb78;
+    }
+
+    .action-btn.export-btn:hover {
+      background: rgba(72,187,120,0.2);
+      border-color: rgba(72,187,120,0.5);
+      color: #68d391;
+    }
+
     .table-container {
       max-width: 1400px;
       margin: 0 auto;
@@ -434,6 +446,7 @@
     <div class="action-buttons">
       <button class="action-btn" id="select-all">Select All</button>
       <button class="action-btn" id="clear-all">Clear Selection</button>
+      <button class="action-btn export-btn" id="export-csv">Export CSV</button>
     </div>
   </div>
 
@@ -832,6 +845,37 @@
       selectedItems.clear();
       renderTable();
       updateSummary();
+    });
+
+    // Export CSV button
+    document.getElementById('export-csv').addEventListener('click', function() {
+      const filteredData = getFilteredData();
+      const headers = ['Appliance', 'Model', 'Specs', 'Price', 'Link', 'Notes'];
+      const csvRows = [headers.join(',')];
+
+      filteredData.forEach(item => {
+        const row = [
+          `"${item.appliance}"`,
+          `"${item.model.replace(/"/g, '""')}"`,
+          `"${item.specs.replace(/"/g, '""')}"`,
+          `"${item.price}"`,
+          `"${item.link}"`,
+          `"${item.notes.replace(/"/g, '""')}"`
+        ];
+        csvRows.push(row.join(','));
+      });
+
+      const csvContent = csvRows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `kitchen-appliances-${currentFilter}.csv`);
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     });
 
     // Initial render
