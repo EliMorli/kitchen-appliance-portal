@@ -228,6 +228,11 @@
       background: transparent;
     }
 
+    .custom-checkbox:focus {
+      outline: 2px solid #64ffda;
+      outline-offset: 2px;
+    }
+
     .custom-checkbox:hover {
       border-color: #64ffda;
     }
@@ -405,8 +410,8 @@
     </div>
     <div class="summary-cards">
       <div class="summary-card">
-        <div class="summary-label">Total Items</div>
-        <div class="summary-value" id="total-items">23</div>
+        <div class="summary-label">Showing</div>
+        <div class="summary-value" id="total-items">23 of 23</div>
       </div>
       <div class="summary-card">
         <div class="summary-label">Selected</div>
@@ -451,7 +456,7 @@
   </div>
 
   <p class="footer-note">
-    Prices are approximate as of January 2026. Click links to view current Costco pricing.
+    Prices are approximate as of January 2026. Click links to view current pricing on Costco or Frigidaire.
   </p>
 
   <script>
@@ -737,8 +742,13 @@
       tbody.innerHTML = filteredData.map(item => `
         <tr class="${selectedItems.has(item.id) ? 'selected' : ''}" data-id="${item.id}">
           <td class="checkbox-cell">
-            <div class="custom-checkbox ${selectedItems.has(item.id) ? 'checked' : ''}" data-id="${item.id}">
-              <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+            <div class="custom-checkbox ${selectedItems.has(item.id) ? 'checked' : ''}"
+                 data-id="${item.id}"
+                 role="checkbox"
+                 aria-checked="${selectedItems.has(item.id)}"
+                 aria-label="Select ${item.appliance}"
+                 tabindex="0">
+              <svg width="12" height="10" viewBox="0 0 12 10" fill="none" aria-hidden="true">
                 <path d="M1 5L4.5 8.5L11 1" stroke="#0c0c0c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
@@ -770,9 +780,15 @@
         </tr>
       `).join('');
 
-      // Add click handlers to checkboxes
+      // Update filtered count display
+      document.getElementById('total-items').textContent =
+        filteredData.length === applianceData.length
+          ? `${applianceData.length}`
+          : `${filteredData.length} of ${applianceData.length}`;
+
+      // Add click and keyboard handlers to checkboxes
       document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
-        checkbox.addEventListener('click', function() {
+        const toggleCheckbox = function() {
           const id = parseInt(this.dataset.id);
           if (selectedItems.has(id)) {
             selectedItems.delete(id);
@@ -781,6 +797,14 @@
           }
           renderTable();
           updateSummary();
+        };
+
+        checkbox.addEventListener('click', toggleCheckbox);
+        checkbox.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleCheckbox.call(this);
+          }
         });
       });
     }
